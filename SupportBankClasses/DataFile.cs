@@ -1,7 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.Extensions.Logging;
-
+//using LumenWorks.Framework.IO.Csv;
+using CsvHelper;
 
 namespace SupportBank.SupportBankClasses;
 
@@ -19,7 +20,7 @@ public class DataFile
     {
         FileName = fileName;
         BankName = bankName;
-        //_lines = new(File.ReadAllLines(FileName));
+        _lines = new(File.ReadAllLines(FileName));
         _bank = new Bank(logger){BankName=bankName};
         _logger = logger;
     }
@@ -75,12 +76,12 @@ public class DataFile
                
     }
 
-    // private void LoadFile()
-    // {
-    //     using var fileReader = new StreamReader(FileName);
-    //         using var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
-    //         var transactions = csvReader.GetRecords<Transaction>();
-    // }
+    private void LoadFile()
+    {
+        using var fileReader = new StreamReader(FileName);
+            using var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
+            var transactions = csvReader.GetRecords<Transaction>();
+    }
     public void List(string ownerName)
     {
         _bank.GetAccount(ownerName).AccountSummary();
